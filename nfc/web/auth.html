@@ -4,47 +4,50 @@
     <link rel="stylesheet" type="text/css" href="stylesAuth.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
-        function nfcStart() {
+        async function nfcStart() {
             if (!("NDEFReader" in window)) {
                 console.log("NFC is not supported on this device");
                 manualsend.style.display = "initial";
-                return;
             }
+            else {
+                try {
+                    console.log("Init nfc reader");
+                    const nfcReader = new NDEFReader();
+                    await nfcReader.scan();
+                    console.log("Reading nfc");
 
-            try {
-                console.log("Init nfc reader");
-                const nfcReader = new NDEFReader();
-                nfcReader.scan();
-                console.log("Reading nfc");
+                    nfcReader.addEventListener("readingerror", () => {
+                        console.log("Reading error");
+                    });
 
-                nfcReader.addEventListener("readingerror", () => {
-                    console.log("Reading error");
-                });
+                    nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
+                        console.log(`Serial number: ${serialNumber}`);
+                        console.log(`Records: ${message.records.length}`);
+                        if (message.records.length > 0) {
+                            var record = message.records[0];
+                            console.assert(record.recordType === "text");
+                            const textDecoder = new TextDecoder(record.encoding);
+                            console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
+                            sendData(record.data)
+                        }
+                    });
 
-                nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
-                    console.log(`Serial number: ${serialNumber}`);
-                    console.log(`Records: ${message.records.length}`);
-                    if (message.records.length > 0) {
-                        var record = message.records[0];
-                        console.assert(record.recordType === "text");
-                        const textDecoder = new TextDecoder(record.encoding);
-                        console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
-                        sendData(record.data)
-                    }
-                });
-
-                nfcsend.style.display = "initial";
-            } catch (error) {
-                console.log(error);
+                    nfcsend.style.display = "initial";
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
 
         function sendData(data) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
+                console.log(this.response);
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.response);
                     location.href = "clientinfo";
+                }
+                else if (this.readyState == 4 && this.status == 401) {
+                    location.href = "unauthorized";
                 }
             };
             xhttp.open("POST", "/nfc/api/v1/senddata", true);

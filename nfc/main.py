@@ -56,6 +56,15 @@ async def clientinfo(client_id: Union[str, None] = Cookie(default=None)):
         return RedirectResponse("/", status_code=303)
 
 
+@app.get("/unauthorized")
+async def unauthorized():
+    with open("nfc/web/unauthorized.html") as htmlFile:
+        html = htmlFile.read()
+        response = Response(content=html, media_type="text/html", status_code=200)
+        response.delete_cookie("client_id")
+        return response
+
+
 @app.get("/logout")
 def logout():
     response = RedirectResponse("/", status_code=303)
@@ -66,11 +75,12 @@ def logout():
 @app.post("/nfc/api/v1/senddata")
 def api_send(data: NfcData):
     print(data)
-    response = Response(content="OK", status_code=200)
     if (validateClient(data.client_id)):
+        response = Response(content="OK", status_code=200)
         response.set_cookie(key="client_id", value=data.client_id)
         return response
     else:
+        response = Response(content="Unauthorized", status_code=401)
         response.delete_cookie("client_id")
         return response
 
@@ -82,7 +92,6 @@ def addClientInfoHtml(html):
 
 @app.post("/nfc/api/v1/identify")
 def Identify(data: NfcData):
-    print(data)
     # 11DP0KLY  mayor
     # X0FSTCTX  vulnerable
     # 03J6TRTT  discapacitado
