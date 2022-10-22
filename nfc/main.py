@@ -38,6 +38,12 @@ async def login(client_id: Union[str, None] = Cookie(default=None)):
             html = html.replace("$client_id", "")
     return Response(content=html, media_type="text/html", status_code=200)
 
+@app.get("/classifier")
+async def classifier():
+    with open("nfc/web/classifier.html") as htmlFile:
+        html = htmlFile.read()
+    return Response(content=html, media_type="text/html", status_code=200)
+
 
 @app.get("/clientinfo")
 async def clientinfo(client_id: Union[str, None] = Cookie(default=None)):
@@ -76,6 +82,7 @@ def addClientInfoHtml(html):
 
 @app.post("/nfc/api/v1/identify")
 def Identify(data: NfcData):
+    print(data)
     # 11DP0KLY  mayor
     # X0FSTCTX  vulnerable
     # 03J6TRTT  discapacitado

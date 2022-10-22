@@ -56,10 +56,10 @@ class Classifier:
     
     def __getType(self):
         if self.client_id in self.mayores:
-            self.__type = "MAYOR"
+            self.__type = "ADULTO MAYOR"
             return
         if self.client_id in self.vulnerables:
-            self.__type = "VULNERABLE"
+            self.__type = "POSIBLE PERSONA VULNERABLE"
             return
         """
         PERSONAS CON DISCAPACIDAD
@@ -72,16 +72,16 @@ class Classifier:
         top = ' '.join(df_calculos.head(5)['NB_SUBGIRO'].values.tolist())
         top = top.lower()
         if 'droguerias' in top:
-            self.__type = "DISCAPACITADO"
+            self.__type = "POSIBLE PERSONA CON DISCAPACITAD"
             return
         if 'doctores' in top:
-            self.__type = "DISCAPACITADO"
+            self.__type = "POSIBLE PERSONA CON DISCAPACITAD"
             return
         if 'medicos' in top:
-            self.__type = "DISCAPACITADO"
+            self.__type = "POSIBLE PERSONA CON DISCAPACITAD"
             return
         if 'funerarios' in top:
-            self.__type = "DISCAPACITADO"
+            self.__type = "POSIBLE PERSONA CON DISCAPACITAD"
             return
     
     def getClassification(self):
