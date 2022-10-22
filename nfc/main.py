@@ -1,3 +1,4 @@
+from urllib import response
 from fastapi import FastAPI, Response
 #from fastapi.responses import ORJSONResponse
 from fastapi.responses import HTMLResponse
@@ -19,9 +20,5 @@ async def root():
 
 @app.post("/nfc/api/v1/senddata")
 def api_send(data: NfcData):
-    return Response(status_code=200)
-
-@app.get("/nfc/api/v1/clientinfo")
-def api_get():
-    data = ClientInfo(name="Faus")
-    return data
+    response = ClientInfo(name="Faus")
+    return response

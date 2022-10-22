@@ -17,11 +17,12 @@
                     nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
                         console.log(`Serial number: ${serialNumber}`);
                         console.log(`Records: ${message.records.length}`);
-                        if(message.records.length > 0){
+                        if (message.records.length > 0) {
                             var record = message.records[0];
                             console.assert(record.recordType === "text");
                             const textDecoder = new TextDecoder(record.encoding);
                             console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
+                            sendData(record.data)
                         }
                     });
                 } catch (error) {
@@ -29,12 +30,27 @@
                 }
             });
         }
+
+        function sendData(data) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this);
+                }
+            };
+            xhttp.open("POST", "/nfc/api/v1/senddata", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send(data);
+        }
     </script>
 </head>
 
 <body onload="nfcStart();">
     <div>
         <button id="readButton">Read NFC</button>
+    </div>
+    <div>
+        <button id="sendButton" onclick='sendData("{\"client_id\":\"888\"}")'>Send Data</button>
     </div>
 </body>
 
