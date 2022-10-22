@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  # api:
+  #   image: "python:slim"
+  #   volumes:
+  #     - ./api:/code/api
+  #   working_dir: /code/api
+  #   entrypoint: 
+  #   ports:
+  #     - 80:80
+  nfc:
+    image: "python:slim" # TODO: check image
+    volumes:
+      - ./nfc:/code/nfc
+    working_dir: /code/nfc
+    entrypoint: ./run.sh
+    ports:
+      - 443:8000
