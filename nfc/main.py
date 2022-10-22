@@ -19,11 +19,6 @@ class NfcData(BaseModel):
     client_id: str
 
 
-class ClientInfo(BaseModel):
-    client_id: str
-    name: str
-
-
 @app.get("/styles.css")
 def styles():
     with open("web/styles.css") as cssFile:
@@ -71,9 +66,11 @@ def api_send(data: NfcData):
         response.delete_cookie("client_id")
         return response
 
+
 def addClientInfoHtml(html):
-    html = html.replace("$client_info_html","CLIENT_INFO_HTML")
+    html = html.replace("$client_info_html", "CLIENT_INFO_HTML")
     return html
+
 
 @app.post("/nfc/api/v1/identify")
 def Identify(data: NfcData):
@@ -86,6 +83,7 @@ def Identify(data: NfcData):
     return {
         "tipo": type,
     }
+
 
 def validateClient(client_id):
     client = clients.loc[clients["NU_CTE_COD"] == client_id]
