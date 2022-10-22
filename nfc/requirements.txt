@@ -2,4 +2,3 @@ pandas
 uvicorn
 fastapi
 pandas
-numpy

@@ -1,9 +1,10 @@
 # imports
 import pandas as pd
-import numpy as np
-
+import os
+dir_list = os.listdir(os.getcwd())
+print(dir_list)
 #Cargar los datos
-fold = '../files/'
+fold = './nfc/files/'
 filenames = ['Catalogo_Giros.csv','Clientes_Descriptivo.csv','Transacciones_Clientes.csv']
 cat_df = pd.read_csv(fold+filenames[0], sep="\t")
 cli_df = pd.read_csv(fold+filenames[1], sep="\t")
@@ -86,3 +87,6 @@ class Classifier:
     def getClassification(self):
         self.__getType()
         return self.__type
+    
+    def getDataClient(self):
+        return self.gen_df.loc[self.gen_df['NU_CTE_COD'] == self.client_id]

@@ -5,15 +5,12 @@ from fastapi import Cookie, FastAPI, Response
 from fastapi.responses import RedirectResponse
 #from fastapi.responses import ORJSONResponse
 from fastapi.responses import HTMLResponse
-from Classifier import Classifier
+from nfc.Classifier import Classifier
 from pydantic import BaseModel
 from typing import Union
 import pandas as pd
 
 app = FastAPI()
-clients = pd.read_csv("../files/Clientes_Descriptivo.csv", sep="\t+")
-clients_trxs = pd.read_csv("../files/Transacciones_Clientes.csv", sep="\t+")
-
 
 class NfcData(BaseModel):
     client_id: str
@@ -81,12 +78,14 @@ def Identify(data: NfcData):
     }
 
 def validateClient(client_id):
-    client = clients.loc[clients["NU_CTE_COD"] == client_id]
+    classifier = Classifier(client_id)
+    client = classifier.getDataClient()
     return client.size > 0
 
 
 def addClientInfoHtml(client_id, html):
-    trxs = clients_trxs.loc[clients_trxs["NU_CTE_COD"] == client_id]
+    classifier = Classifier(client_id)
+    trxs = classifier.getDataClient()
     client_info_html = "<table><tr>"
     client_info_html += "<th>Fecha de corte</th>"
     client_info_html += "<th>Fecha de operación</th>"
