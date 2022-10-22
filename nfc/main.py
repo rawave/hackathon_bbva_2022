@@ -24,11 +24,18 @@ class ClientInfo(BaseModel):
     name: str
 
 
+@app.get("/styles.css")
+def styles():
+    with open("web/styles.css") as cssFile:
+        css = cssFile.read()
+    return Response(content=css, media_type="text/css", status_code=200)
+
+
 @app.get("/")
 async def login(client_id: Union[str, None] = Cookie(default=None)):
     with open("web/auth.html") as htmlFile:
         html = htmlFile.read()
-        if(client_id != None):
+        if (client_id != None):
             html = html.replace("$client_id", client_id)
         else:
             html = html.replace("$client_id", "")
@@ -106,5 +113,5 @@ def addClientInfoHtml(client_id, html):
 
     client_info_html += "</table>"
     html = html.replace("$client_info_html", client_info_html)
-    #print(html)
+    # print(html)
     return html
