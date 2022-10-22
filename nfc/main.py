@@ -7,11 +7,15 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+
 class NfcData(BaseModel):
     client_id: str
 
+
 class ClientInfo(BaseModel):
+    client_id: str
     name: str
+
 
 @app.get("/nfc")
 async def root():
@@ -19,12 +23,15 @@ async def root():
         data = htmlFile.read()
     return Response(content=data, media_type="text/html", status_code=200)
 
+
 @app.post("/nfc/api/v1/senddata")
 def api_send(data: NfcData):
     return getClientData(data)
 
+
 def getClientData(data: NfcData):
     # TODO: Validate client in db
     # TODO: Get client info
-    client_info = ClientInfo(name="Faus")
+    client_info = ClientInfo(client_id=data.client_id,
+                             name="Unknown")
     return client_info
