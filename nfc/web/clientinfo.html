@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<head>
+    <script type="text/javascript">
+        function pageStart() {
+            logoutButton.addEventListener("click", async () => {
+                console.log("logout");
+                location.href = "logout";
+            });
+        }
+    </script>
+</head>
+
+<body onload="pageStart();">
+    <div>
+        <button id="logoutButton">Logout</button>
+        <p>
+            $client_info_html
+        </p>
+    </div>
+</body>
+
+</html>

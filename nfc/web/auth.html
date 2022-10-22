@@ -3,11 +3,14 @@
 <head>
     <script type="text/javascript">
         function nfcStart() {
-            readButton.addEventListener("click", async () => {
+            if (!("NDEFReader" in window)) {
+                manualsend.style.display = "initial"
+            }
+            else {
                 console.log("Init nfc reader");
                 try {
                     const nfcReader = new NDEFReader();
-                    await nfcReader.scan();
+                    nfcReader.scan();
                     console.log("Reading nfc");
 
                     nfcReader.addEventListener("readingerror", () => {
@@ -28,7 +31,7 @@
                 } catch (error) {
                     console.log(error);
                 }
-            });
+            }
         }
 
         function sendData(data) {
@@ -36,6 +39,7 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log(this.response);
+                    location.href = "clientinfo";
                 }
             };
             xhttp.open("POST", "/nfc/api/v1/senddata", true);
@@ -46,11 +50,13 @@
 </head>
 
 <body onload="nfcStart();">
-    <div>
-        <button id="readButton">Read NFC</button>
-    </div>
-    <div>
-        <button id="sendButton" onclick='sendData("{\"client_id\":\"888\"}")'>Send Data</button>
+    <div id="manualsend" style="display: none">
+        <p>
+            <p>NFC no disponible en este dispositivo</p>
+            <label>Número de Cliente</label>
+            <input id="clientId" type="text" value="0MNXBHXN">
+            <button id="sendButton" onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío Manual</button>
+        </p>
     </div>
 </body>
 
