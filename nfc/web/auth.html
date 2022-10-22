@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<head>
+    <script type="text/javascript">
+        function nfcStart() {
+            readButton.addEventListener("click", async () => {
+                console.log("Init nfc reader");
+                try {
+                    const nfcReader = new NDEFReader();
+                    await nfcReader.scan();
+                    console.log("Reading nfc");
+
+                    ndef.addEventListener("readingerror", () => {
+                        console.log("Reading error");
+                    });
+
+                    ndef.addEventListener("reading", ({ message, serialNumber }) => {
+                        console.log(`Serial number: ${serialNumber}`);
+                        console.log(`Records: ${message.records.length}`);
+                        if(message.records.length > 0){
+                            console.log(`Record 0: ${message.records[0]}`)
+                        }
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body onload="nfcStart();">
+    <div>
+        <button id="readButton">Read NFC</button>
+    </div>
+</body>
+
+</html>
