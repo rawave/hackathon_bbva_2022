@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="stylesAuth.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
-        async function nfcStart() {
+        async function pageStart() {
             if (window.history) {
                 history.pushState({}, window.location.href);
             }
@@ -12,34 +12,47 @@
             if (!("NDEFReader" in window)) {
                 console.log("NFC is not supported on this device");
                 manualsend.style.display = "initial";
+                return;
+            }
+
+            nfcsend.style.display = "initial";
+            console.log("verifying NFC permissions");
+            const nfcPermissionStatus = await navigator.permissions.query({ name: "nfc" });
+            if (nfcPermissionStatus.state === "granted") {
+                await nfcStart();
             }
             else {
-                try {
-                    console.log("Init nfc reader");
-                    const nfcReader = new NDEFReader();
-                    await nfcReader.scan();
-                    console.log("Reading nfc");
+                requestPermissions.addEventListener("click", async () => { await nfcStart() });
+                requestPermissions.style.display = "initial";
+            }
 
-                    nfcReader.addEventListener("readingerror", () => {
-                        console.log("Reading error");
-                    });
+        }
 
-                    nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
-                        console.log(`Serial number: ${serialNumber}`);
-                        console.log(`Records: ${message.records.length}`);
-                        if (message.records.length > 0) {
-                            var record = message.records[0];
-                            console.assert(record.recordType === "text");
-                            const textDecoder = new TextDecoder(record.encoding);
-                            console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
-                            sendData(record.data)
-                        }
-                    });
+        async function nfcStart() {
+            try {
 
-                    nfcsend.style.display = "initial";
-                } catch (error) {
-                    console.log(error);
-                }
+                console.log("Init nfc reader");
+                const nfcReader = new NDEFReader();
+                await nfcReader.scan();
+                console.log("Reading nfc");
+
+                nfcReader.addEventListener("readingerror", () => {
+                    console.log("Reading error");
+                });
+
+                nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
+                    console.log(`Serial number: ${serialNumber}`);
+                    console.log(`Records: ${message.records.length}`);
+                    if (message.records.length > 0) {
+                        var record = message.records[0];
+                        console.assert(record.recordType === "text");
+                        const textDecoder = new TextDecoder(record.encoding);
+                        console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
+                        sendData(record.data)
+                    }
+                });
+            } catch (error) {
+                console.log(error);
             }
         }
 
@@ -63,7 +76,7 @@
     </script>
 </head>
 
-<body onload="nfcStart();">
+<body onload="pageStart();">
     <main>
         <div id="manualsend" class="body_error" style="display: none">
             <img src="https://seeklogo.com/images/N/nfc-near-field-communication-logo-671492F7C0-seeklogo.com.png">
@@ -78,6 +91,9 @@
         </div>
         <div id="nfcsend" style="display: none">
             <p>NFC supported</p>
+            <div>
+                <button id="requestPermissions" style="display: none">Solicitar permisos NFC</button>
+            </div>
         </div>
     </main>
 </body>
