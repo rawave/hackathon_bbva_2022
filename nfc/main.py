@@ -18,14 +18,14 @@ class NfcData(BaseModel):
 
 @app.get("/styles.css")
 def styles():
-    with open("web/styles.css") as cssFile:
+    with open("nfc/web/styles.css") as cssFile:
         css = cssFile.read()
     return Response(content=css, media_type="text/css", status_code=200)
 
 
 @app.get("/")
 async def login(client_id: Union[str, None] = Cookie(default=None)):
-    with open("web/auth.html") as htmlFile:
+    with open("nfc/web/auth.html") as htmlFile:
         html = htmlFile.read()
         if (client_id != None):
             html = html.replace("$client_id", client_id)
@@ -37,7 +37,7 @@ async def login(client_id: Union[str, None] = Cookie(default=None)):
 @app.get("/clientinfo")
 async def clientinfo(client_id: Union[str, None] = Cookie(default=None)):
     if (client_id != None):
-        with open("web/clientinfo.html") as htmlFile:
+        with open("nfc/web/clientinfo.html") as htmlFile:
             html = htmlFile.read()
             html = addClientInfoHtml(client_id, html)
             return Response(content=html, media_type="text/html", status_code=200)
