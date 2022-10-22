@@ -17,7 +17,7 @@ class ClientInfo(BaseModel):
     name: str
 
 
-@app.get("/nfc")
+@app.get("/")
 async def root():
     with open("web/auth.html") as htmlFile:
         data = htmlFile.read()
