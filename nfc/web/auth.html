@@ -10,15 +10,18 @@
                     await nfcReader.scan();
                     console.log("Reading nfc");
 
-                    ndef.addEventListener("readingerror", () => {
+                    nfcReader.addEventListener("readingerror", () => {
                         console.log("Reading error");
                     });
 
-                    ndef.addEventListener("reading", ({ message, serialNumber }) => {
+                    nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
                         console.log(`Serial number: ${serialNumber}`);
                         console.log(`Records: ${message.records.length}`);
                         if(message.records.length > 0){
-                            console.log(`Record 0: ${message.records[0]}`)
+                            var record = message.records[0];
+                            console.assert(record.recordType === "text");
+                            const textDecoder = new TextDecoder(record.encoding);
+                            console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
                         }
                     });
                 } catch (error) {
