@@ -1,6 +1,8 @@
 # README
 
+## Run project
 
-cd api
-pip install -r requirements.txt
-python -m flask --app main run
+```
+cd nfc
+uvicorn main:app --reload --host 0.0.0.0 --port 8000 --ssl-keyfile decrypted_key.pem --ssl-certfile cert.pem
+```
