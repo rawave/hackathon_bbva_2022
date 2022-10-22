@@ -5,6 +5,7 @@ from fastapi import Cookie, FastAPI, Response
 from fastapi.responses import RedirectResponse
 #from fastapi.responses import ORJSONResponse
 from fastapi.responses import HTMLResponse
+from Classifier import Classifier
 from pydantic import BaseModel
 from typing import Union
 
@@ -54,3 +55,15 @@ def api_send(data: NfcData):
 def addClientInfoHtml(html):
     html = html.replace("$client_info_html","CLIENT_INFO_HTML")
     return html
+
+@app.post("/nfc/api/v1/identify")
+def Identify(data: NfcData):
+    # 11DP0KLY  mayor
+    # X0FSTCTX  vulnerable
+    # 03J6TRTT  discapacitado
+    # 60PZ035D  normal
+    classifier = Classifier(data.client_id)
+    type = classifier.getClassification()
+    return {
+        "tipo": type,
+    }
