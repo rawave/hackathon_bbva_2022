@@ -22,6 +22,11 @@ def styles():
         css = cssFile.read()
     return Response(content=css, media_type="text/css", status_code=200)
 
+@app.get("/stylesAuth.css")
+def styles():
+    with open("nfc/web/stylesAuth.css") as cssFile:
+        css = cssFile.read()
+    return Response(content=css, media_type="text/css", status_code=200)
 
 @app.get("/")
 async def login(client_id: Union[str, None] = Cookie(default=None)):
