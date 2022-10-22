@@ -46,8 +46,11 @@
                 if (this.readyState == 4 && this.status == 200) {
                     location.href = "clientinfo";
                 }
-                else if (this.readyState == 4 && this.status == 401) {
-                    location.href = "unauthorized";
+                else if (this.readyState == 4 && this.status == 403) {
+                    if (window.history) {
+                        history.pushState({}, window.location.href);
+                    }
+                    window.location.replace("forbidden");
                 }
             };
             xhttp.open("POST", "/nfc/api/v1/senddata", true);

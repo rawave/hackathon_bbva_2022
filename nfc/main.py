@@ -3,14 +3,13 @@ from tokenize import Name
 from urllib import response
 from fastapi import Cookie, FastAPI, Response
 from fastapi.responses import RedirectResponse
-#from fastapi.responses import ORJSONResponse
-from fastapi.responses import HTMLResponse
 from nfc.Classifier import Classifier
 from pydantic import BaseModel
 from typing import Union
 import pandas as pd
 
 app = FastAPI()
+
 
 class NfcData(BaseModel):
     client_id: str
@@ -22,11 +21,13 @@ def styles():
         css = cssFile.read()
     return Response(content=css, media_type="text/css", status_code=200)
 
+
 @app.get("/stylesAuth.css")
 def styles():
     with open("nfc/web/stylesAuth.css") as cssFile:
         css = cssFile.read()
     return Response(content=css, media_type="text/css", status_code=200)
+
 
 @app.get("/")
 async def login(client_id: Union[str, None] = Cookie(default=None)):
@@ -37,6 +38,7 @@ async def login(client_id: Union[str, None] = Cookie(default=None)):
         else:
             html = html.replace("$client_id", "")
     return Response(content=html, media_type="text/html", status_code=200)
+
 
 @app.get("/classifier")
 async def classifier():
@@ -56,11 +58,12 @@ async def clientinfo(client_id: Union[str, None] = Cookie(default=None)):
         return RedirectResponse("/", status_code=303)
 
 
-@app.get("/unauthorized")
-async def unauthorized():
-    with open("nfc/web/unauthorized.html") as htmlFile:
+@app.get("/forbidden")
+async def forbidden():
+    with open("nfc/web/forbidden.html") as htmlFile:
         html = htmlFile.read()
-        response = Response(content=html, media_type="text/html", status_code=200)
+        response = Response(
+            content=html, media_type="text/html", status_code=200)
         response.delete_cookie("client_id")
         return response
 
@@ -80,14 +83,9 @@ def api_send(data: NfcData):
         response.set_cookie(key="client_id", value=data.client_id)
         return response
     else:
-        response = Response(content="Unauthorized", status_code=401)
+        response = Response(content="Forbidden", status_code=403)
         response.delete_cookie("client_id")
         return response
-
-
-def addClientInfoHtml(html):
-    html = html.replace("$client_info_html", "CLIENT_INFO_HTML")
-    return html
 
 
 @app.post("/nfc/api/v1/identify")
