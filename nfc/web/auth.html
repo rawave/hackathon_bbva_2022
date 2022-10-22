@@ -5,6 +5,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
         async function nfcStart() {
+            if (window.history) {
+                history.pushState({}, window.location.href);
+            }
+
             if (!("NDEFReader" in window)) {
                 console.log("NFC is not supported on this device");
                 manualsend.style.display = "initial";
@@ -44,12 +48,11 @@
             xhttp.onreadystatechange = function () {
                 console.log(this.response);
                 if (this.readyState == 4 && this.status == 200) {
-                    location.href = "clientinfo";
+                    console.log("clientinfo");
+                    window.location.replace("clientinfo");
                 }
                 else if (this.readyState == 4 && this.status == 403) {
-                    if (window.history) {
-                        history.pushState({}, window.location.href);
-                    }
+                    console.log("forbidden");
                     window.location.replace("forbidden");
                 }
             };

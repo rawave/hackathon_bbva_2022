@@ -5,9 +5,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
         function pageStart() {
+            if (window.history) {
+                history.pushState({}, window.location.href);
+            }
+
             logoutButton.addEventListener("click", async () => {
                 console.log("logout");
-                location.href = "logout";
+                window.location.replace("logout");
             });
         }
     </script>
@@ -25,9 +29,9 @@
     </header>
     <main>
         <section>
-        <p>
-            $client_info_html
-        </p>
+            <p>
+                $client_info_html
+            </p>
         </section>
     </main>
 </body>
