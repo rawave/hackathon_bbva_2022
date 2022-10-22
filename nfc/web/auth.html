@@ -53,8 +53,7 @@
     <div id="manualsend" style="display: none">
             <img>
             <p>NFC no disponible en este dispositivo</p>
-            <label>Número de Cliente</label>
-            <input id="clientId" type="text" value="0MNXBHXN">
+            <input id="clientId" type="text" value="$client_id" placeholder="Número de cliente">
             <button id="sendButton" onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío Manual</button>
     </div>
 </body>
