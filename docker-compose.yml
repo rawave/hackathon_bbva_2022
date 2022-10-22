@@ -12,6 +12,7 @@ services:
     image: "python:slim" # TODO: check image
     volumes:
       - ./nfc:/code/nfc
+      - ./files:/code/files
     working_dir: /code/nfc
     entrypoint: ./run.sh
     ports:

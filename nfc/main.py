@@ -90,5 +90,5 @@ def addClientInfoHtml(client_id, html):
 
     client_info_html += "</table>"
     html = html.replace("$client_info_html", client_info_html)
-    print(html)
+    #print(html)
     return html
