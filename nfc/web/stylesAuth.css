@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #FAF8F7;
+    font-family: 'Quicksand', serif;
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_error {
+    display: flex;
+    flex-direction: column;
+}
+
+.body_error-input {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.body_error-input > button {
+    margin: .5rem 0;
+}
+
+button {
+    background-color: #000;
+    border: 1px solid #000;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+}
+
+button:hover {
+    background-color: #fff;
+    color: #000;
+    transition: 0.5s;
+}
+
+input {
+    margin-top: 0.2rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+}
+
+div > img {
+    width: 60%;
+    margin: 2rem 0;
+}
+
+div > p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

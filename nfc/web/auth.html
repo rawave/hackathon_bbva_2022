@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <head>
+    <link rel="stylesheet" type="text/css" href="stylesAuth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
         function nfcStart() {
             if (!("NDEFReader" in window)) {
@@ -50,10 +52,15 @@
 </head>
 
 <body onload="nfcStart();">
-    <div id="manualsend" style="display: none">
-            <img>
-            <p>NFC no disponible en este dispositivo</p>
-            <input id="clientId" type="text" value="$client_id" placeholder="Número de cliente">
-            <button id="sendButton" onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío Manual</button>
-    </div>
+    <main>
+        <div id="manualsend" class="body_error" style="display: none">
+                <img src="https://seeklogo.com/images/N/nfc-near-field-communication-logo-671492F7C0-seeklogo.com.png">
+                <p>NFC no disponible en este dispositivo</p>
+            <div class="body_error-input">
+                <label>Número de Cliente</label>
+                <input id="clientId" type="text" value="0MNXBHXN">
+                <button id="sendButton" onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío Manual</button>
+            </div>
+        </div>
+    </main>
 </body>
