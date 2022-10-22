@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
         function pageStart() {
             logoutButton.addEventListener("click", async () => {
@@ -12,12 +14,27 @@
 </head>
 
 <body onload="pageStart();">
-    <div>
-        <button id="logoutButton">Logout</button>
+    <header>
+        <div>
+            <h1>Welcome John!</h1>
+            <h3>Oct 22, 2022</h3>
+        </div>
+        <div class="container_button">
+            <button id="logoutButton">Logout</button>
+        </div>
+    </header>
+    <main>
+        <section>
+            <div class="card_tittle">
+                <p>Company</p>
+                <p>Position</p>
+                <p>Duration</p>
+                <p>Job ID</p>
+                <p>Status</p>
+            </div>
         <p>
             $client_info_html
         </p>
-    </div>
+        </section>
+    </main>
 </body>
-
-</html>
