@@ -8,6 +8,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY . /code/nfc
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["uvicorn", "nfc.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "nfc.main:app", "--host", "0.0.0.0", "--port", "8080"]
