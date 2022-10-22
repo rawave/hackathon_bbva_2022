@@ -6,33 +6,36 @@
     <script type="text/javascript">
         function nfcStart() {
             if (!("NDEFReader" in window)) {
-                manualsend.style.display = "initial"
+                console.log("NFC is not supported on this device");
+                manualsend.style.display = "initial";
+                return;
             }
-            else {
+
+            try {
                 console.log("Init nfc reader");
-                try {
-                    const nfcReader = new NDEFReader();
-                    nfcReader.scan();
-                    console.log("Reading nfc");
+                const nfcReader = new NDEFReader();
+                nfcReader.scan();
+                console.log("Reading nfc");
 
-                    nfcReader.addEventListener("readingerror", () => {
-                        console.log("Reading error");
-                    });
+                nfcReader.addEventListener("readingerror", () => {
+                    console.log("Reading error");
+                });
 
-                    nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
-                        console.log(`Serial number: ${serialNumber}`);
-                        console.log(`Records: ${message.records.length}`);
-                        if (message.records.length > 0) {
-                            var record = message.records[0];
-                            console.assert(record.recordType === "text");
-                            const textDecoder = new TextDecoder(record.encoding);
-                            console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
-                            sendData(record.data)
-                        }
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
+                nfcReader.addEventListener("reading", ({ message, serialNumber }) => {
+                    console.log(`Serial number: ${serialNumber}`);
+                    console.log(`Records: ${message.records.length}`);
+                    if (message.records.length > 0) {
+                        var record = message.records[0];
+                        console.assert(record.recordType === "text");
+                        const textDecoder = new TextDecoder(record.encoding);
+                        console.log(`Text: ${textDecoder.decode(record.data)} (${record.lang})`);
+                        sendData(record.data)
+                    }
+                });
+
+                nfcsend.style.display = "initial";
+            } catch (error) {
+                console.log(error);
             }
         }
 
@@ -54,13 +57,18 @@
 <body onload="nfcStart();">
     <main>
         <div id="manualsend" class="body_error" style="display: none">
-                <img src="https://seeklogo.com/images/N/nfc-near-field-communication-logo-671492F7C0-seeklogo.com.png">
-                <p>NFC no disponible en este dispositivo</p>
+            <img src="https://seeklogo.com/images/N/nfc-near-field-communication-logo-671492F7C0-seeklogo.com.png">
+            <p>NFC no disponible en este dispositivo</p>
             <div class="body_error-input">
                 <label>Número de Cliente</label>
                 <input id="clientId" type="text" value="$client_id" placeholder="Número de cliente">
-                <button id="sendButton" onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío Manual</button>
+                <button id="sendButton"
+                    onclick='var data={"client_id": clientId.value.trim().toUpperCase()}; sendData(JSON.stringify(data))'>Envío
+                    Manual</button>
             </div>
+        </div>
+        <div id="nfcsend" style="display: none">
+            <p>NFC supported</p>
         </div>
     </main>
 </body>
